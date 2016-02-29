@@ -1,14 +1,7 @@
 # coding: utf-8
 import numpy as np
 import matplotlib.pyplot as plt
-
-def add_ones(samples):
-	# adds column of ones to the end
-	samples = np.array(samples)
-	temp = np.ones([samples.shape[0], samples.shape[1] + 1])
-	temp[:,0:-1] = samples
-	samples = temp
-	return samples
+from tools import *
 
 def linreg(samples, target, method='GD', iterations=20, rate=0.01, precision=6):
 	# liniar regression with gradient decent or exact formula
@@ -57,24 +50,3 @@ def linreg(samples, target, method='GD', iterations=20, rate=0.01, precision=6):
 		
 def logreg():
 	return
-
-
-plt.close()
-samples = 50*np.random.rand(1000,1)
-target = 50.45 - 41.7 * samples
-noise = np.random.normal(0,1000,(1000,1))
-target_n = target + noise			
-weights = linreg(samples, target_n, iterations=500, rate=0.001)
-print(weights)
-plt.show()
-plt.close()
-plt.scatter(samples, target_n)
-samples_n = add_ones(samples)
-estimation = np.dot(samples_n, weights)
-plt.plot(samples, estimation, 'r')
-weights = linreg(samples, target_n, method='exact')
-print(weights)
-estimation = np.dot(samples_n, weights)
-plt.plot(samples, estimation, 'y')
-plt.plot(samples, target, 'g')
-plt.show()
