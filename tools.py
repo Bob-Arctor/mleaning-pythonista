@@ -23,6 +23,25 @@ def add_ones(samples):
 	temp[:,0:-1] = samples
 	samples = temp
 	return samples
+
+
+def add_zeros(samples):
+	# adds column of ones to the end
+	samples = np.array(samples)
+	temp = np.zeros([samples.shape[0], samples.shape[1] + 1])
+	temp[:,0:-1] = samples
+	samples = temp
+	return samples
+
+
+def add_column(samples, col=1):
+	# adds column of ones to the end
+	samples = np.array(samples)
+	temp = np.empty([samples.shape[0], samples.shape[1] + 1])
+	temp.fill(col)
+	temp[:,0:-1] = samples
+	samples = temp
+	return samples
  
  
 def categorize(features, ignore_nans=True):
@@ -42,14 +61,31 @@ def categorize(features, ignore_nans=True):
     
 def rescale(samples, low=-1, high=1):
     # returns rescaled column from -1 to 1
+    mins = np.min(samples, axis=0)
+    maxs = np.max(samples, axis=0)
     fs = np.asfarray(samples)
-    for col in fs.T:
-        col = (2 * col - col.max() - col.min())/(col.max() - col.min())
-    return fs
-    
-    
-def scale_linear_bycolumn(rawpoints, high=100.0, low=0.0):
-    mins = np.min(rawpoints, axis=0)
-    maxs = np.max(rawpoints, axis=0)
     rng = maxs - mins
-    return high - (((high - low) * (maxs - rawpoints)) / rng)
+    return high - (((high - low) * (maxs - fs)) / rng)
+
+
+def scale_back(scaled, original, low=-1, high=1):
+	mins = np.min(original, axis=0)
+	maxs = np.max(original, axis=0)
+	rng = maxs - mins
+	return maxs - (high - scaled)*rng / (high-low)
+
+    
+def standardize(samples):
+	mean = np.mean(samples, axis=0)
+	std = np.std(samples, axis=0)
+	return (samples - mean) / std
+	
+	
+def stand_back(samples, original):
+	mean = np.mean(original, axis=0)
+	std = np.std(original, axis=0)	
+	return s * std + mean
+	
+	
+def delnans(s):
+	return s[~np.isnan(s).any(axis=1)]
