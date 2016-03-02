@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from mlearning import *
 from tools import *
 
-
+'''
 plt.close()
 samples = 50*np.random.rand(1000,1)
 target = 50.45 - 41.7 * samples
@@ -75,4 +75,3 @@ x2 = (-weights[2,0] - weights[0,0]*x1) / weights[1,0]
 plt.plot(x1,x2)
 plt.gray()
 plt.show()
-'''

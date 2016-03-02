@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tools import *
 
-def linreg(samples, target, method='BGD', iterations=20, rate=0.01, precision=6):
+def linreg(samples, target, method='BGD', iterations=20, rate=0.01, precision=6, regularization=0):
 	# regression
 	# linear with gradient decent or exact formula
 	# or logistic
