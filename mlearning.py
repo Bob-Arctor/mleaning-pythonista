@@ -92,11 +92,13 @@ def logreg(samples, target, method='BGD', iterations=20, rate=0.01, precision=4,
 		# print results
 		# print('%d iteration: error %.4f relative error %.4f'%(i, err, relative_err))
 		if round(relative_err[0][0], precision) == 1.:
-			break
+			#break
+			rate *=2
 		elif np.abs(old_err[0][0]) < np.abs(err[0][0]):
 			print('Error increasing, try changing learning rate. Currently: %10f'%(rate))
-			weights = 0*weights
-			break
+			#weights = 0*weights
+			#break
+			rate /= 2
 		elif np.isnan(err[0][0]):
 			print('Error increased to infinity, try changing learning rate')
 			weights = 0*weights

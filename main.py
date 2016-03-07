@@ -48,7 +48,7 @@ data = np.asfarray(data)
 
 target = np.atleast_2d(data[:,2]).T
 #samples = np.concatenate([data[:,:3],data[:,4:]],axis=1)
-samples = data[:,:2]
+samples = standardize(rescale(data[:,:2]))
 #samples_t = samples[:100,:]
 #s_t_n = rescale(samples_t)
 #s_p_n = rescale(samples_p)
@@ -57,7 +57,7 @@ samples = data[:,:2]
 #target_p = target.T[100:,:]
 #print(samples_t.shape)
 
-weights = logreg_nonlin(samples, target, iterations=8000, rate=0.0000000000000001, precision=7, regularization=5, order=3)
+weights = logreg_nonlin(samples, target, iterations=3000, rate=0.0001, precision=4, regularization=5, order=2)
 #print(samples)
 plt.show()
 print('-'*50)
@@ -76,9 +76,9 @@ s2 = add_ones(s2)
 z= np.zeros(shape=(len(x1),len(x2)))
 for i in range(len(x1)):
 	for j in range(len(x2)):
-		z[i,j] = np.dot(add_ones(raise_order(np.atleast_2d([x1[i],x2[j]]),3)),weights)
+		z[i,j] = np.dot(add_ones(raise_order(np.atleast_2d([x1[i],x2[j]]),2)),weights)
 #x2=(-weights[2,0] - weights[0,0]*x1) / weights[1,0]
 #plt.plot(x1,x2)
 z = z.T
-plt.contour(x1,x2,z)#, levels=[0])
+plt.contour(x1,x2,z, c='r', levels=[0])
 plt.show()
