@@ -1,4 +1,5 @@
 import numpy as np
+import itertools
 
 def tanh(x):
     return np.tanh(x)
@@ -89,3 +90,27 @@ def stand_back(samples, original):
 	
 def delnans(s):
 	return s[~np.isnan(s).any(axis=1)]
+	
+
+#raises order of a sample set by n, returns new columns
+def raise_order(samples, n):
+	if n<2:
+		raise AttributeError('n must be greater or equal to 2')
+	else:
+		s = samples.copy()
+		# make iterations array
+		iter = []
+		for i in range(2, n+1):
+			iter += list(itertools.combinations_with_replacement(range(s.shape[1]),i))
+		# for every combination
+		for el in iter:
+			# for every element in combination
+			f = None
+			for i in el:
+				if f is None:
+					f = samples[:,i].copy()
+				else:
+					f *= samples[:,i]
+			s = np.concatenate([s,np.atleast_2d(f).T], axis=1)
+	return s
+		

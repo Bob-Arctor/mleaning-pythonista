@@ -38,7 +38,7 @@ print('-'*20)
 plt.close()
 #loading data
 
-data = np.genfromtxt('logreg2.txt', dtype=str, delimiter='\n',skip_header=1)
+data = np.genfromtxt('logreg4.txt', dtype=str, delimiter='\n',skip_header=1)
 #print(data)
 data = [x.split('\t') for x in data]
 #data = [ [s.strip() for s in x] for x in data]
@@ -49,8 +49,6 @@ data = np.asfarray(data)
 target = np.atleast_2d(data[:,2]).T
 #samples = np.concatenate([data[:,:3],data[:,4:]],axis=1)
 samples = data[:,:2]
-print(samples.shape)
-print(target.shape)
 #samples_t = samples[:100,:]
 #s_t_n = rescale(samples_t)
 #s_p_n = rescale(samples_p)
@@ -59,19 +57,28 @@ print(target.shape)
 #target_p = target.T[100:,:]
 #print(samples_t.shape)
 
-weights = logreg(samples, target, iterations=7000, rate=0.001)
-#print(weights)
+weights = logreg_nonlin(samples, target, iterations=8000, rate=0.0000000000000001, precision=7, regularization=5, order=3)
+#print(samples)
 plt.show()
 print('-'*50)
-print(np.concatenate([logistic(np.dot(add_ones(samples),weights)),target],axis=1))
+#print(np.concatenate([logistic(np.dot(add_ones(raise_order(samples,3)),weights)),target],axis=1))
 print('-'*50)
 #print(np.concatenate([logistic(np.dot(add_ones(s_t_n),weights)),target_t],axis=1))
 print(weights)
 #colors = plt.cm.coolwarm(list(target_t.T))
-#plt.close()
+plt.close()
 plt.scatter(samples[:,0], samples[:,1], c=target, s=50)
-x1 = np.linspace(samples[:,0].min(),samples[:,0].max(),5)
-x2 = (-weights[2,0] - weights[0,0]*x1) / weights[1,0]
-plt.plot(x1,x2)
 plt.gray()
+x1 = np.linspace(samples[:,0].min(),samples[:,0].max(),50)
+x2 = np.linspace(samples[:,1].min(),samples[:,1].max(),50)
+s2 = raise_order(samples,2)
+s2 = add_ones(s2)
+z= np.zeros(shape=(len(x1),len(x2)))
+for i in range(len(x1)):
+	for j in range(len(x2)):
+		z[i,j] = np.dot(add_ones(raise_order(np.atleast_2d([x1[i],x2[j]]),3)),weights)
+#x2=(-weights[2,0] - weights[0,0]*x1) / weights[1,0]
+#plt.plot(x1,x2)
+z = z.T
+plt.contour(x1,x2,z)#, levels=[0])
 plt.show()
