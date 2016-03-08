@@ -62,11 +62,11 @@ def categorize(features, ignore_nans=True):
     
 def rescale(samples, low=-1, high=1):
     # returns rescaled column from -1 to 1
-    mins = np.min(samples, axis=0)
-    maxs = np.max(samples, axis=0)
-    fs = np.asfarray(samples)
-    rng = maxs - mins
-    return high - (((high - low) * (maxs - fs)) / rng)
+	mins = np.min(samples, axis=0)
+	maxs = np.max(samples, axis=0)
+	fs = np.asfarray(samples)
+	rng = maxs - mins
+	return high - (((high - low) * (maxs - fs)) / rng)
 
 
 def scale_back(scaled, original, low=-1, high=1):
@@ -85,7 +85,20 @@ def standardize(samples):
 def stand_back(samples, original):
 	mean = np.mean(original, axis=0)
 	std = np.std(original, axis=0)	
-	return s * std + mean
+	return samples * std + mean
+	
+
+def getstats(samples):
+	mins = np.min(samples, axis=0)
+	maxs = np.max(samples, axis=0)
+	scaled_x = rescale(samples)
+	mean = np.mean(scaled_x, axis=0)
+	std = np.std(scaled_x, axis=0)
+	stats = {'min':mins,
+			'max':maxs,
+			'mean':mean,
+			'std':std}
+	return stats
 	
 	
 def delnans(s):
@@ -94,8 +107,10 @@ def delnans(s):
 
 #raises order of a sample set by n, returns new columns
 def raise_order(samples, n):
-	if n<2:
-		raise AttributeError('n must be greater or equal to 2')
+	if n==1:
+		return samples
+	elif n<1:
+		raise AttributeError('n must be greater or equal to 1')
 	else:
 		s = samples.copy()
 		# make iterations array

@@ -11,14 +11,19 @@ from mlearning import *
 from tools import *
 import logreg
 
-data = np.genfromtxt('logreg3.txt', dtype=str, delimiter='\n',skip_header=1)
+data = np.genfromtxt('logreg4.txt', dtype=str, delimiter='\n',skip_header=1)
 data = [x.split('\t') for x in data]
 data = np.asfarray(data)
 
-target = np.atleast_2d(data[:,2]).T
-samples = standardize(rescale(data[:,:2]))
+target = np.atleast_2d(data[:,3]).T
+# samples = standardize(rescale(data[:,:2]))
+samples = data[:,:2]
 
 plt.gray()
 
 logr = logreg.LogReg()
-logr.fit(samples, target, iterations=2000, rate=0.00001, precision=2, regularization=5, order=4)
+logr.fit(samples, target, iterations=500, rate=0.00001, precision=2, regularization=5, order=4)
+
+# p = logr.predict(samples)
+
+#print(logr.accuracy)
