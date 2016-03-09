@@ -136,7 +136,17 @@ class LogReg(learner.Learner):
 		z= np.zeros(shape=(len(u),len(v)))
 		for i in range(len(u)):
 			for j in range(len(v)):
-				z[i,j] = np.dot(add_ones(raise_order(np.atleast_2d([u_scaled[i],v_scaled[j]]),self.order)),self.weights)
+				# create multiarray for 2 features
+				# all other features are = 0
+				multi = np.atleast_2d(np.zeros(shape=(1, X.shape[1])))
+				multi[0, x1] = u_scaled[i]
+				multi[0, x2] = v_scaled[j]
+				# raise order
+				multi = add_ones(raise_order(np.atleast_2d(multi),self.order))
+				# remove all zeroes from multi and weights
+				w = self.weights[~np.all(multi.T == 0, axis=1)]
+				multi = 	np.atleast_2d(multi[0,~np.all(multi == 0, axis=0)])
+				z[i,j] = np.dot(multi,w)
 		z = z.T
 		ax.contour(u,v,z, c='r', levels=[0])
 		

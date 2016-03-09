@@ -101,8 +101,18 @@ def getstats(samples):
 	return stats
 	
 	
-def delnans(s):
-	return s[~np.isnan(s).any(axis=1)]
+def delnans_any(s, ax=1):
+	if ax is 1:
+		return s[~np.isnan(s).any(axis=1)]
+	elif ax is 0:
+		return s[:, ~np.isnan(s).any(axis=0)]
+	
+	
+def delnans_all(s, ax=1):
+	if ax is 1:
+		return s[~np.isnan(s).all(axis=1)]
+	elif ax is 0:
+		return s[:, ~np.isnan(s).all(axis=0)]
 	
 
 #raises order of a sample set by n, returns new columns
@@ -129,3 +139,16 @@ def raise_order(samples, n):
 			s = np.concatenate([s,np.atleast_2d(f).T], axis=1)
 	return s
 		
+
+def array_to_float(data, tonans=True):
+	result = np.zeros((data.shape[0], data.shape[1]))
+	for i in range(data.shape[0]):
+		for j in range(data.shape[1]):
+			try: 
+				result[i,j] = float(data[i,j])
+			except ValueError:
+				if tonans or result[i,j] is '':
+					result[i,j] = np.nan
+				else:
+					result[i,j] = data[i,j]
+	return result

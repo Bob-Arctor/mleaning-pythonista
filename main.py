@@ -9,11 +9,11 @@ import matplotlib.pyplot as plt
 from mlearning import *
 from tools import *
 
-'''
+
 plt.close()
 samples = 50*np.random.rand(1000,1)
 target = 50.45 - 41.7 * samples
-noise = np.random.normal(0,1000,(1000,1))
+noise = np.random.normal(0,100,(1000,1))
 target_n = target + noise			
 weights = linreg(samples, target_n, iterations=500, rate=0.001)
 print(weights)
@@ -23,11 +23,11 @@ plt.scatter(samples, target_n)
 samples_n = add_ones(samples)
 estimation = np.dot(samples_n, weights)
 plt.plot(samples, estimation, 'r')
-weights = linreg(samples, target_n, method='exact')
+weights = linreg(samples, target_n, method='Norm')
 print(weights)
 estimation = np.dot(samples_n, weights)
 plt.plot(samples, estimation, 'y')
-plt.plot(samples, target, 'g')
+#plt.plot(samples, target, 'g')
 plt.show()
 
 '''
@@ -82,3 +82,4 @@ for i in range(len(x1)):
 z = z.T
 plt.contour(x1,x2,z, c='r', levels=[0])
 plt.show()
+'''
